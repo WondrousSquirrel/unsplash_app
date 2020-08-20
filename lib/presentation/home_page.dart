@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget{
     return Row(children: [
       Expanded(child: Column(children: [
         Container(
-            child: Expanded(child: AsyncImageList())
+            child: Expanded(child: ImageList())
         ),
       ],))
     ]);

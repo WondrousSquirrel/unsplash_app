@@ -10,31 +10,12 @@ import 'package:unsplash/models/models.dart';
 import 'package:unsplash/presentation/card_widget.dart';
 import 'package:unsplash/store/app_state.dart';
 
-class AsyncImageList extends StatelessWidget {
-  final Completer completer = new Completer();
+class ImageList extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, dynamic>(
-      onInit: (store) => store.dispatch(FetchPhotoCollectionActions().fetchListOfPictures(1)),
-      converter: (store) => store.state.photoCollection,
-      builder: (context, photoCollection) {
-        return Scaffold(body: photoCollection != null ?
-        ImageListBuilder(photoCollection) :
-        Center(child:  CircularProgressIndicator()));
-      }
-    );
-  }
+  _ImageList createState() => _ImageList();
 }
 
-class ImageListBuilder extends StatefulWidget {
-  final List<Photo> photoCollection;
-  @override
-  _ImageListBuilder createState() => _ImageListBuilder();
-
-  ImageListBuilder(this.photoCollection);
-}
-
-class _ImageListBuilder extends State<ImageListBuilder> {
+class _ImageList extends State<ImageList> {
   Completer completer = new Completer();
   List<Photo> photoCollection;
   bool isLoading = false;
@@ -44,7 +25,7 @@ class _ImageListBuilder extends State<ImageListBuilder> {
   @override
   void initState(){
     super.initState();
-    photoCollection = widget.photoCollection;
+    _loadMore();
   }
 
   _loadMore()  async{
@@ -55,7 +36,11 @@ class _ImageListBuilder extends State<ImageListBuilder> {
     await Redux.store.dispatch(FetchPhotoCollectionActions().fetchListOfPictures(page));
     final newCollection = Redux.store.state.photoCollection;
     setState(() {
-      photoCollection.addAll(newCollection);
+      if(photoCollection == null) {
+        photoCollection = newCollection;
+      } else {
+        photoCollection.addAll(newCollection);
+      }
       isLoading = false;
     });
   }
@@ -78,7 +63,7 @@ class _ImageListBuilder extends State<ImageListBuilder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildList(),
+      body: photoCollection != null? _buildList() : CircularProgressIndicator(),
     );
   }
 }
