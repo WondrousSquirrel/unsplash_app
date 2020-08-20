@@ -18,7 +18,9 @@ class AsyncImageList extends StatelessWidget {
       onInit: (store) => store.dispatch(FetchPhotoCollectionActions().fetchListOfPictures(1)),
       converter: (store) => store.state.photoCollection,
       builder: (context, photoCollection) {
-        return Scaffold(body: photoCollection != null ? ImageListBuilder(photoCollection) : Center(child:  CircularProgressIndicator()));
+        return Scaffold(body: photoCollection != null ?
+        ImageListBuilder(photoCollection) :
+        Center(child:  CircularProgressIndicator()));
       }
     );
   }
@@ -53,14 +55,9 @@ class _ImageListBuilder extends State<ImageListBuilder> {
     await Redux.store.dispatch(FetchPhotoCollectionActions().fetchListOfPictures(page));
     final newCollection = Redux.store.state.photoCollection;
     setState(() {
-      print('new collection $newCollection');
       photoCollection.addAll(newCollection);
       isLoading = false;
     });
-  }
-
-  Widget _buildRow(Photo photo) {
-    return CardWidget(photo);
   }
 
   Widget _buildList() {
@@ -72,7 +69,7 @@ class _ImageListBuilder extends State<ImageListBuilder> {
             itemCount: photoCollection.length,
             padding: EdgeInsets.all(16.0),
             itemBuilder: (context, i) {
-              return _buildRow(photoCollection[i]);
+              return CardWidget(photoCollection[i]);
             }
         )
     ) : Text('Loading') ;

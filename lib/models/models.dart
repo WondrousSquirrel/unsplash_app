@@ -1,1 +1,1 @@
-export 'Photo.dart';
+export 'photo.dart';

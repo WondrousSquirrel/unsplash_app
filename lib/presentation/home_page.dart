@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:unsplash/presentation/ImageList.dart';
+import 'package:unsplash/presentation/image_list.dart';
 
 class HomePage extends StatelessWidget{
   @override

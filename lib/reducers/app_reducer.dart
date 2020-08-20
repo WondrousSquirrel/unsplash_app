@@ -1,5 +1,4 @@
 import 'package:unsplash/actions/actions.dart';
-import 'package:unsplash/reducers/photo_reducer.dart';
 import 'package:unsplash/store/app_state.dart';
 
 AppState appReducer(AppState state, action) {
@@ -13,7 +12,7 @@ AppState appReducer(AppState state, action) {
   }
   if(action is FetchPhotoCollectionSuccessAction) {
     state.state = LoadingState.none;
-    final nextState = photosReducer(state, action);
+    final nextState = action.photoCollection;
     return state.copyWith(photoCollection: nextState);
   }
   return state;
